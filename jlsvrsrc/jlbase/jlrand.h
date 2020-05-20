@@ -38,8 +38,6 @@ namespace jlsvr
 
             uint32_t m_dwRandSeed;
         };
-
-        #define sJlRand CRandTool::Instance()
     } // namespace jlbase
 } // namespace jlsvr
 

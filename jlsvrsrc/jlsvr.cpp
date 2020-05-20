@@ -1,9 +1,10 @@
 #include"jltest.h"
-#include"jlutil.h"
+//#include"jlutil.h"
+#include"jlmutex.h"
 int main(int argc, char const *argv[])
 {
     /* code */
-    TestMutex();
+    Test();
     for(;;)
     {
         jlsvr::jlbase::SleepMs(100);
