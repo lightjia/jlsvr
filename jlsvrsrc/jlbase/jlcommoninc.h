@@ -9,6 +9,7 @@
 #include "jldef.h"
 #include<iostream>
 #include <memory>
+#include <sys/time.h>
 
 #if (defined PLATFORM_WINDOWS)
 #elif  (defined PLATFORM_LINUX)

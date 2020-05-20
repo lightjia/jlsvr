@@ -24,8 +24,10 @@ namespace jlsvr
         typedef unsigned short _u16;
         typedef signed int _i32;
         typedef unsigned int _u32;
+        typedef signed long _l;
+        typedef unsigned long _ul;
         typedef signed long long _i64;
         typedef unsigned long long _u64;
-    } // namespace jldef
+    } // namespace jlbase
 } // namespace jlsvr
 #endif //__JLDEF__H_

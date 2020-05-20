@@ -25,6 +25,11 @@
         "stdexcept": "cpp",
         "tuple": "cpp",
         "utility": "cpp",
-        "memory": "cpp"
+        "memory": "cpp",
+        "chrono": "cpp",
+        "ctime": "cpp",
+        "mutex": "cpp",
+        "ratio": "cpp",
+        "system_error": "cpp"
     }
 }
