@@ -16,7 +16,7 @@
 
 namespace jlsvr
 {
-    namespace jldef
+    namespace jlbase
     {
         typedef signed char _i8;
         typedef unsigned char _u8;
