@@ -64,6 +64,8 @@ namespace jlsvr
         void GreenPrint(const char *pData);
         void BluePrint(const char *pData);
         void CyanPrint(const char *pData);
+        void BlackPrint(const char *pData);
+        void WhitePrint(const char *pData);
         void RandColorPrint(const char *pData);
     }; // namespace jlbase
 } // namespace jlsvr

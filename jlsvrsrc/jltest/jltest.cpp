@@ -9,7 +9,7 @@ void Test()
     for (int i = 0; i < 0xFFF; ++i)
     {
         jlsvr::jlbase::SleepMs(1000);
-        jlsvr::jlbase::GreenPrint(pData);
-        jlsvr::jlbase::YellowPrint(pData);
+        //jlsvr::jlbase::BlackPrint(pData);
+        jlsvr::jlbase::WhitePrint(pData);
     }
 }
