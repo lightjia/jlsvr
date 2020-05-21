@@ -7,32 +7,32 @@ namespace jlsvr
     {
         void RedPrint(const char *pData)
         {
-            fprintf(stdout, "\033[%dm%s\033[%dm", COLOR_FOREGROUND_RED, pData, COLOR_CONTROL_RESET);
+            fprintf(stdout, "\033[%d;%dm%s\033[%dm", COLOR_FOREGROUND_RED, COLOR_BACKGROUND_BLACK, pData, COLOR_CONTROL_RESET);
         }
 
         void MagentaPrint(const char *pData)
         {
-            fprintf(stdout, "\033[%dm%s\033[%dm", COLOR_FOREGROUND_MAGENTA, pData, COLOR_CONTROL_RESET);
+            fprintf(stdout, "\033[%d;%dm%s\033[%dm", COLOR_FOREGROUND_MAGENTA, COLOR_BACKGROUND_BLACK, pData, COLOR_CONTROL_RESET);
         }
 
         void YellowPrint(const char *pData)
         {
-            fprintf(stdout, "\033[%dm%s\033[%dm", COLOR_FOREGROUND_YELLOW, pData, COLOR_CONTROL_RESET);
+            fprintf(stdout, "\033[%d;%dm%s\033[%dm", COLOR_FOREGROUND_YELLOW, COLOR_BACKGROUND_BLACK, pData, COLOR_CONTROL_RESET);
         }
 
         void GreenPrint(const char *pData)
         {
-            fprintf(stdout, "\033[%dm%s\033[%dm", COLOR_FOREGROUND_GREEN, pData, COLOR_CONTROL_RESET);
+            fprintf(stdout, "\033[%d;%dm%s\033[%dm", COLOR_FOREGROUND_GREEN, COLOR_BACKGROUND_BLACK, pData, COLOR_CONTROL_RESET);
         }
 
         void BluePrint(const char *pData)
         {
-            fprintf(stdout, "\033[%dm%s\033[%dm", COLOR_FOREGROUND_BLUE, pData, COLOR_CONTROL_RESET);
+            fprintf(stdout, "\033[%d;%dm%s\033[%dm", COLOR_FOREGROUND_BLUE, COLOR_BACKGROUND_BLACK, pData, COLOR_CONTROL_RESET);
         }
 
         void CyanPrint(const char *pData)
         {
-            fprintf(stdout, "\033[%dm%s\033[%dm", COLOR_FOREGROUND_CYAN, pData, COLOR_CONTROL_RESET);
+            fprintf(stdout, "\033[%d;%dm%s\033[%dm", COLOR_FOREGROUND_CYAN, COLOR_BACKGROUND_BLACK, pData, COLOR_CONTROL_RESET);
         }
 
         void BlackPrint(const char *pData)
