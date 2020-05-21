@@ -19,10 +19,27 @@ namespace jlsvr
             virtual void UnLock() = 0;
         };
 
+        class CNoneMutex : CJlMutex
+        {
+        public:
+            void Lock() override
+            {
+            }
+
+            void UnLock() override
+            {
+            }
+
+            int TryLock() override
+            {
+                return 0;
+            }
+        };
+
         class CJlAutoMutex
         {
         public:
-            CJlAutoMutex(CJlMutex *pMutex): mpJlMutex(pMutex)
+            CJlAutoMutex(CJlMutex *pMutex) : mpJlMutex(pMutex)
             {
                 if (mpJlMutex)
                 {
@@ -39,7 +56,7 @@ namespace jlsvr
             }
 
         private:
-            CJlMutex* mpJlMutex;
+            CJlMutex *mpJlMutex;
         };
     } // namespace jlbase
 } // namespace jlsvr

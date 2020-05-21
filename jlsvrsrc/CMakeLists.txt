@@ -20,7 +20,7 @@ macro(add_src_subdirs source_files)
 	endforeach(_subdir)
 endmacro()
 
-add_src_subdirs(source_files "." "jlbase" "jltest")
+add_src_subdirs(source_files "." "jlbase" "jlcplus11" "jltest")
 
 set(lib_link_flag "")
 set(CMAKE_C_FLAGS "-ggdb")

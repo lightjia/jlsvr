@@ -8,7 +8,7 @@
 #define __JLDEF__H_
 
 //Get the platform
-#if (defined WIN32) || (defined _WIN32) ||(defined WIN64) || (defined _WIN64)
+#if (defined WIN32) || (defined _WIN32) || (defined WIN64) || (defined _WIN64)
 #define PLATFORM_WINDOWS
 #elif (defined __linux__)
 #define PLATFORM_LINUX
@@ -28,6 +28,22 @@ namespace jlsvr
         typedef unsigned long _ul;
         typedef signed long long _i64;
         typedef unsigned long long _u64;
+
+#pragma pack(1)
+        struct tagJlTime
+        {
+            int tmsec;          /* seconds after the minute - [0,59] */
+            int tmmin;          /* minutes after the hour - [0,59] */
+            int tmhour;         /* hours since midnight - [0,23] */
+            int tmmday;         /* day of the month - [1,31] */
+            int tmmon;          /* months since January - [0,11] */
+            int tmyear;         /* years since 1900 */
+            int tmwday;         /* days since Sunday - [0,6] */
+            int tmyday;         /* days since January 1 - [0,365] */
+            int tmisdst;        /* daylight savings time flag */
+            int tmmilliseconds; /*milliseconds after the sec[0,1000]*/
+        };
+#pragma pack()
     } // namespace jlbase
 } // namespace jlsvr
 #endif //__JLDEF__H_

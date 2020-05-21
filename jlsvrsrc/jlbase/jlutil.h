@@ -16,6 +16,7 @@ namespace jlsvr
         //time oper
         void SleepMs(jlsvr::jlbase::_ul dwMillions);
         jlsvr::jlbase::_u64 GetCurMs();
+        jlsvr::jlbase::tagJlTime GetNowTime();
 
         //os oper
         jlsvr::jlbase::_ul GetThreadId();
@@ -23,6 +24,8 @@ namespace jlsvr
         //file oper
         bool IsFileExist(const char *strFileName);
         bool IsDirExist(const char *strDirectory);
+        int RmFile(const char *pFileName);
+        int RmFile(const char *pFileName);
     } // namespace jlbase
 } // namespace jlsvr
 #endif //__JLUTIL__H_
