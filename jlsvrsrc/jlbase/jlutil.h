@@ -7,10 +7,13 @@
 #define __JLUTIL__H_
 #include "jlcommoninc.h"
 
+#define JLARRAYLEN(X) (int)(sizeof(X) / sizeof(X[0]))
+
 namespace jlsvr
 {
     namespace jlbase
     {
+
         void SleepMs(jlsvr::jlbase::_ul dwMillions);
 
         jlsvr::jlbase::_u64 GetCurMs();

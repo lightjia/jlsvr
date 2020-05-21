@@ -1,5 +1,6 @@
 #include "jlcolordef.h"
 #include "jlrand.h"
+#include "jlutil.h"
 
 namespace jlsvr
 {
@@ -48,7 +49,7 @@ namespace jlsvr
         void RandColorPrint(const char *pData)
         {
             static int colorCtrl[] = {COLOR_CONTROL_HIGHLIGHT, COLOR_CONTROL_DIM, COLOR_CONTROL_UNDERLINE, COLOR_CONTROL_FLICKER, COLOR_CONTROL_REVERSE};
-            int iCtrl = colorCtrl[CJlRand::Instance()->RandInt(0, 4)];
+            int iCtrl = colorCtrl[CJlRand::Instance()->RandInt(0, JLARRAYLEN(colorCtrl) - 1)];
             int iFore = CJlRand::Instance()->RandInt(COLOR_FOREGROUND_BLACK, COLOR_FOREGROUND_WHITE);
             int iBlack = CJlRand::Instance()->RandInt(COLOR_BACKGROUND_BLACK, COLOR_BACKGROUND_WHITE);
             fprintf(stdout, "\033[%d;%d;%dm%s\033[%dm", iCtrl, iFore, iBlack, pData, COLOR_CONTROL_RESET);
