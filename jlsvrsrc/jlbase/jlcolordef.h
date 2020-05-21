@@ -67,6 +67,7 @@ namespace jlsvr
         void BlackPrint(const char *pData);
         void WhitePrint(const char *pData);
         void RandColorPrint(const char *pData);
+        void CustomColorPrint(const char *pData, ColorControl iCtrl, ColorForeground iFore, ColorBackground iBak);
     }; // namespace jlbase
 } // namespace jlsvr
 #endif //__JL_COLOR_DEF__H_

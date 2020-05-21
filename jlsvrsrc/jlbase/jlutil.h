@@ -13,10 +13,16 @@ namespace jlsvr
 {
     namespace jlbase
     {
-
+        //time oper
         void SleepMs(jlsvr::jlbase::_ul dwMillions);
-
         jlsvr::jlbase::_u64 GetCurMs();
+
+        //os oper
+        jlsvr::jlbase::_ul GetThreadId();
+
+        //file oper
+        bool IsFileExist(const char *strFileName);
+        bool IsDirExist(const char *strDirectory);
     } // namespace jlbase
 } // namespace jlsvr
 #endif //__JLUTIL__H_

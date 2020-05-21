@@ -9,10 +9,11 @@
 #include "jldef.h"
 #include<iostream>
 #include <memory>
-#include <sys/time.h>
+#include <sys/stat.h>
 
 #if (defined PLATFORM_WINDOWS)
 #elif  (defined PLATFORM_LINUX)
 #include<unistd.h>
+#include <sys/time.h>
 #endif
 #endif//__JLCOMMON__H_

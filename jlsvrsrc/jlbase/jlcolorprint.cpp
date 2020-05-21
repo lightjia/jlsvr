@@ -52,7 +52,17 @@ namespace jlsvr
             int iCtrl = colorCtrl[CJlRand::Instance()->RandInt(0, JLARRAYLEN(colorCtrl) - 1)];
             int iFore = CJlRand::Instance()->RandInt(COLOR_FOREGROUND_BLACK, COLOR_FOREGROUND_WHITE);
             int iBlack = CJlRand::Instance()->RandInt(COLOR_BACKGROUND_BLACK, COLOR_BACKGROUND_WHITE);
+            while (iBlack == iFore)
+            {
+                iBlack = CJlRand::Instance()->RandInt(COLOR_BACKGROUND_BLACK, COLOR_BACKGROUND_WHITE);
+            }
+
             fprintf(stdout, "\033[%d;%d;%dm%s\033[%dm", iCtrl, iFore, iBlack, pData, COLOR_CONTROL_RESET);
+        }
+
+        void CustomColorPrint(const char *pData, ColorControl iCtrl, ColorForeground iFore, ColorBackground iBak)
+        {
+               fprintf(stdout, "\033[%d;%d;%dm%s\033[%dm", iCtrl, iFore, iBak, pData, COLOR_CONTROL_RESET);
         }
     }; // namespace jlbase
 } // namespace jlsvr
