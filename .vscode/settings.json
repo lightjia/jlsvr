@@ -30,6 +30,10 @@
         "ctime": "cpp",
         "mutex": "cpp",
         "ratio": "cpp",
-        "system_error": "cpp"
+        "system_error": "cpp",
+        "condition_variable": "cpp",
+        "cstring": "cpp",
+        "thread": "cpp",
+        "atomic": "cpp"
     }
 }

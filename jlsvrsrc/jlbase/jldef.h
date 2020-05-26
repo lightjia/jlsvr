@@ -6,7 +6,7 @@
 
 #ifndef __JLDEF__H_
 #define __JLDEF__H_
-
+#include <functional>
 //Get the platform
 #if (defined WIN32) || (defined _WIN32) || (defined WIN64) || (defined _WIN64)
 #define PLATFORM_WINDOWS
@@ -43,6 +43,15 @@ namespace jlsvr
             int tmisdst;        /* daylight savings time flag */
             int tmmilliseconds; /*milliseconds after the sec[0,1000]*/
         };
+
+        struct jl_mem_oper_func
+        {
+            std::function<void *(size_t)> pMallocFunc;
+            std::function<void(void *)> pFreeFunc;
+            std::function<void *(size_t, size_t)> pCallocFunc;
+            std::function<void *(void *, size_t)> pReallocFunc;
+        };
+        const struct jl_mem_oper_func DEFAULT_JL_MEM_FUNC = {malloc, free, calloc, realloc};
 #pragma pack()
     } // namespace jlbase
 } // namespace jlsvr
