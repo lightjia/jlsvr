@@ -9,8 +9,12 @@
 #include "jlmembuffer.h"
 #include "jlcolordef.h"
 #include "jl11mutex.h"
+#include "jl11thread.h"
+#include "jlsingleton.h"
 #include <memory>
 #include <cstdio>
+#include <cstdarg>
+#include <vector>
 namespace jlsvr
 {
     namespace jlbase
@@ -41,21 +45,20 @@ namespace jlsvr
             {LOG_LEVEL_DBG, jlsvr::jlbase::WhitePrint, std::unique_ptr<CJlMemBuffer>(new CJlMemBuffer())},
             {LOG_LEVEL_INFO, jlsvr::jlbase::GreenPrint, std::unique_ptr<CJlMemBuffer>(new CJlMemBuffer())}};
 
-        class JlLog
+        class CJlLog
         {
         public:
-            JlLog(LogType iType, LogLevel iLevel, const std::string &strCat, const std::string &strLogDir);
-            ~JlLog();
+            CJlLog(LogType iType, LogLevel iLevel, const std::string &strCat, const std::string &strLogDir);
+            ~CJlLog();
 
         public:
-            void LogErr();
-            void LogDbg();
-            void LogInfo();
             std::string &GetLogFileName() { return mStrFileName; }
+            void FlushLog();
 
         private:
             void AddLogItem(LogLevel iLevel, const char *format, ...);
             void CheckLogFile();
+            void CloseFile();
 
         private:
             LogType miType;
@@ -63,8 +66,29 @@ namespace jlsvr
             std::string mStrCat;
             std::string mStrFileName;
             std::string mstrLogDir;
+            jlsvr::jlplus11::CPlus11Mutex mMux;
             jlsvr::jlbase::_u64 miCount = 0;
             FILE *mpLog = nullptr;
+        };
+
+#define JL_LOG_ERR(sLog, fmt, ...) sLog->AddLogItem(LOG_LEVEL_ERR, "[ERROR](%s:%s:%d)[Thread:%u] " fmt, __FILE__, __FUNCTION__, __LINE__, (unsigned int)jlsvr::jlbase::GetThreadId(), ##__VA_ARGS__)
+#define JL_LOG_DBG(sLog, fmt, ...) sLog->AddLogItem(LOG_LEVEL_DBG, "[DEBUG](%s:%s:%d)[Thread:%u] " fmt, __FILE__, __FUNCTION__, __LINE__, (unsigned int)jlsvr::jlbase::GetThreadId(), ##__VA_ARGS__)
+#define JL_LOG_INFO(sLog, fmt, ...) sLog->AddLogItem(LOG_LEVEL_INFO, "[Thread:%u] " fmt, (unsigned int)jlsvr::jlbase::GetThreadId(), ##__VA_ARGS__)
+
+        class CJlLogManager : public jlsvr::jlbase::CJlSingleton<CJlLogManager>, public jlsvr::jlplus11::CJl11Thread
+        {
+            SINGLE_CLASS_INITIAL(CJlLogManager);
+
+        public:
+            std::shared_ptr<CJlLog> &NewLogger(LogType iType, LogLevel iLevel, const std::string &strCat, const std::string &strLogDir);
+            std::shared_ptr<CJlLog> &DefaultLogger(){return mVecLoggers[0];};
+
+        protected:
+            void OnThreadRun() override final;
+
+        private:
+            bool mbInit = false;
+            std::vector<std::shared_ptr<CJlLog>> mVecLoggers;
         };
     } // namespace jlbase
 } // namespace jlsvr
