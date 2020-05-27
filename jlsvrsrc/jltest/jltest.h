@@ -4,4 +4,5 @@
 #include"jlutil.h"
 void Test();
 void TestMutex();
+void TestThread();
 #endif  //__JLTEST__H_

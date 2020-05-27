@@ -20,10 +20,13 @@ namespace jlsvr
 
         //os oper
         jlsvr::jlbase::_ul GetThreadId();
-
+        std::string GetProgramRunPath();
+        
         //file oper
         bool IsFileExist(const char *strFileName);
         bool IsDirExist(const char *strDirectory);
+        int MkDir(const char *path);
+        int MkDirs(const char *path);
         int RmFile(const char *pFileName);
         int RmFile(const char *pFileName);
     } // namespace jlbase

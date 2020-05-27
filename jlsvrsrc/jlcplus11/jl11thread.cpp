@@ -26,7 +26,7 @@ namespace jlsvr
         void CJl11Thread::OnThreadWait(jlsvr::jlbase::_u64 iUsec)
         {
             std::unique_lock<std::mutex> lck(mMtx);
-            mCv.wait_for(lck, std::chrono::seconds(iUsec));
+            mCv.wait_for(lck, std::chrono::milliseconds(iUsec));
         }
 
         void CJl11Thread::OnThreadActivate()

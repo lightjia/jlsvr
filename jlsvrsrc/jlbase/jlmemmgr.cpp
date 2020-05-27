@@ -83,6 +83,13 @@ namespace jlsvr
             return pRet;
         }
 
+        void CJlMemMgr::Print()
+        {
+            char szBuf[180];
+            snprintf(szBuf, 180, "miMalloc:%lld miFree:%lld\n", miMalloc.load(), miFree.load());
+            jlsvr::jlbase::MagentaPrint(szBuf);
+        }
+
         void *CJlMemMgr::MemRealloc(void *ptr, size_t size)
         {
             return CJlMemMgr::Instance()->DoRealloc(ptr, size);

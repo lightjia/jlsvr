@@ -133,6 +133,74 @@ namespace jlsvr
             return bRet;
         }
 
+        int MkDir(const char *path)
+        {
+            if (NULL == path || strlen(path) <= 0)
+            {
+                return 1;
+            }
+
+            if (IsDirExist(path))
+            {
+                return 0;
+            }
+
+#if (defined PLATFORM_WINDOWS)
+            if (!::CreateDirectoryA(path, NULL))
+            {
+                return 1;
+            }
+#elif (defined PLATFORM_LINUX)
+            if (mkdir(path, 0755) != 0)
+            {
+                fprintf(stderr, "mkdir %s failed(%s)\n", path, strerror(errno));
+                return 1;
+            }
+#endif
+
+            return 0;
+        }
+
+        int MkDirs(const char *path)
+        {
+            size_t len = 0;
+            if (NULL == path || (len = strlen(path)) <= 0)
+            {
+                return 1;
+            }
+
+            char *pTmp = (char *)malloc((len + 3) * sizeof(char));
+            if (NULL == pTmp)
+            {
+                return 1;
+            }
+
+            for (int i = 0; i < (int)len; i++)
+            {
+                if (pTmp[i] != '\\' && pTmp[i] != '/')
+                {
+                    continue;
+                }
+
+                if (0 == i)
+                {
+                    continue;
+                }
+
+                pTmp[i] = '\0';
+                if (MkDir(pTmp) != 0)
+                {
+                    break;
+                }
+
+                pTmp[i] = '/';
+            }
+
+            free(pTmp);
+
+            return MkDir(path);
+        }
+
         int RmFile(const char *pFileName)
         {
             if (strlen(pFileName) <= 0)

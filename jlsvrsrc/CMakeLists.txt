@@ -22,6 +22,10 @@ endmacro()
 
 add_src_subdirs(source_files "." "jlbase" "jlcplus11" "jltest")
 
+#link_directories("/usr/lib64/mysql/")
+#set(lib_link ${lib_link} "${lib_dir}/libuv/linux/lib/libuv.a")
+set(lib_link ${lib_link} "pthread")
+
 set(lib_link_flag "")
 set(CMAKE_C_FLAGS "-ggdb")
 set(CMAKE_CXX_FLAGS "-O0 -std=c++0x -ggdb")

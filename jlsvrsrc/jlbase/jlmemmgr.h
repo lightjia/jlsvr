@@ -1,6 +1,6 @@
 /*
 @author:lightjia
-@date:2020/5/20
+@date:2020/5/26
 @desc:内存管理模块
 */
 #ifndef __JL_MEMMGR__H_
@@ -21,6 +21,9 @@ namespace jlsvr
             static void MemFree(void *pData);
             static void *MemCalloc(size_t count, size_t size);
             static void *MemRealloc(void *ptr, size_t size);
+
+        public:
+            void Print();
 
         private:
             void *DoMalloc(size_t iLen);
