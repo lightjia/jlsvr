@@ -19,6 +19,7 @@ namespace jlsvr
 {
     namespace jlbase
     {
+#define __FILENAME__ (__FILE__ + SOURCE_PATH_SIZE)
         enum LogType
         {
             LOG_TYPE_SCREEN = 0,
@@ -31,20 +32,10 @@ namespace jlsvr
             LOG_LEVEL_ERR = 0,
             LOG_LEVEL_DBG,
             LOG_LEVEL_INFO,
+            LOG_LEVEL_MAX,
         };
 
-        struct tagLogHandler
-        {
-            LogLevel iLevel;
-            std::function<void(const char *)> funcPrint;
-            std::unique_ptr<CJlMemBuffer> buffer;
-        };
-
-        struct tagLogHandler logHandles[] = {
-            {LOG_LEVEL_ERR, jlsvr::jlbase::RedPrint, std::unique_ptr<CJlMemBuffer>(new CJlMemBuffer())},
-            {LOG_LEVEL_DBG, jlsvr::jlbase::WhitePrint, std::unique_ptr<CJlMemBuffer>(new CJlMemBuffer())},
-            {LOG_LEVEL_INFO, jlsvr::jlbase::GreenPrint, std::unique_ptr<CJlMemBuffer>(new CJlMemBuffer())}};
-
+        class CJlLogManager;
         class CJlLog
         {
         public:
@@ -53,10 +44,10 @@ namespace jlsvr
 
         public:
             std::string &GetLogFileName() { return mStrFileName; }
+            void AddLogItem(LogLevel iLevel, const char *format, ...);
             void FlushLog();
 
         private:
-            void AddLogItem(LogLevel iLevel, const char *format, ...);
             void CheckLogFile();
             void CloseFile();
 
@@ -69,19 +60,22 @@ namespace jlsvr
             jlsvr::jlplus11::CPlus11Mutex mMux;
             jlsvr::jlbase::_u64 miCount = 0;
             FILE *mpLog = nullptr;
+            jlsvr::jlbase::CJlMemBuffer* mpBuffs[LOG_LEVEL_MAX];
         };
 
-#define JL_LOG_ERR(sLog, fmt, ...) sLog->AddLogItem(LOG_LEVEL_ERR, "[ERROR](%s:%s:%d)[Thread:%u] " fmt, __FILE__, __FUNCTION__, __LINE__, (unsigned int)jlsvr::jlbase::GetThreadId(), ##__VA_ARGS__)
-#define JL_LOG_DBG(sLog, fmt, ...) sLog->AddLogItem(LOG_LEVEL_DBG, "[DEBUG](%s:%s:%d)[Thread:%u] " fmt, __FILE__, __FUNCTION__, __LINE__, (unsigned int)jlsvr::jlbase::GetThreadId(), ##__VA_ARGS__)
+#define JL_LOG_ERR(sLog, fmt, ...) sLog->AddLogItem(LOG_LEVEL_ERR, "[ERROR](%s:%s:%d)[Thread:%u] " fmt, __FILENAME__, __FUNCTION__, __LINE__, (unsigned int)jlsvr::jlbase::GetThreadId(), ##__VA_ARGS__)
+#define JL_LOG_DBG(sLog, fmt, ...) sLog->AddLogItem(LOG_LEVEL_DBG, "[DEBUG](%s:%s:%d)[Thread:%u] " fmt, __FILENAME__, __FUNCTION__, __LINE__, (unsigned int)jlsvr::jlbase::GetThreadId(), ##__VA_ARGS__)
 #define JL_LOG_INFO(sLog, fmt, ...) sLog->AddLogItem(LOG_LEVEL_INFO, "[Thread:%u] " fmt, (unsigned int)jlsvr::jlbase::GetThreadId(), ##__VA_ARGS__)
 
         class CJlLogManager : public jlsvr::jlbase::CJlSingleton<CJlLogManager>, public jlsvr::jlplus11::CJl11Thread
         {
             SINGLE_CLASS_INITIAL(CJlLogManager);
 
+            ~CJlLogManager() {}
+
         public:
             std::shared_ptr<CJlLog> &NewLogger(LogType iType, LogLevel iLevel, const std::string &strCat, const std::string &strLogDir);
-            std::shared_ptr<CJlLog> &DefaultLogger(){return mVecLoggers[0];};
+            std::shared_ptr<CJlLog> &DefaultLogger() { return mVecLoggers[0]; };
 
         protected:
             void OnThreadRun() override final;
@@ -90,6 +84,10 @@ namespace jlsvr
             bool mbInit = false;
             std::vector<std::shared_ptr<CJlLog>> mVecLoggers;
         };
+
+#define LOG_ERR(fmt, ...) jlsvr::jlbase::CJlLogManager::Instance()->DefaultLogger()->AddLogItem(jlsvr::jlbase::LOG_LEVEL_ERR, "[ERROR](%s:%s:%d)[Thread:%u] " fmt, __FILENAME__, __FUNCTION__, __LINE__, (unsigned int)jlsvr::jlbase::GetThreadId(), ##__VA_ARGS__)
+#define LOG_DBG(fmt, ...) jlsvr::jlbase::CJlLogManager::Instance()->DefaultLogger()->AddLogItem(jlsvr::jlbase::LOG_LEVEL_DBG, "[DEBUG](%s:%s:%d)[Thread:%u] " fmt, __FILENAME__, __FUNCTION__, __LINE__, (unsigned int)jlsvr::jlbase::GetThreadId(), ##__VA_ARGS__)
+#define LOG_INFO(fmt, ...) jlsvr::jlbase::CJlLogManager::Instance()->DefaultLogger()->AddLogItem(jlsvr::jlbase::LOG_LEVEL_INFO, "[Thread:%u] " fmt, (unsigned int)jlsvr::jlbase::GetThreadId(), ##__VA_ARGS__)
     } // namespace jlbase
 } // namespace jlsvr
 #endif //__JL_LOG__H_

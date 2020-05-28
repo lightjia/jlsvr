@@ -11,19 +11,25 @@ namespace jlsvr
             miBufferLen = 0;
             miBufferUseLen = 0;
             miAppendNum = 0;
+            mBuff = nullptr;
         }
 
         CJlMemBuffer::~CJlMemBuffer()
         {
             miBufferLen = 0;
             miBufferUseLen = 0;
+            if (mBuff)
+            {
+                JL_MEMMGR_MEM_FUNC.pFreeFunc(mBuff);
+                mBuff = nullptr;
+            }
         }
 
         CJlMemBuffer::CJlMemBuffer(const CJlMemBuffer &cMemBuffer)
         {
             if (this != &cMemBuffer)
             {
-                SetBuffer(cMemBuffer.mBuff, cMemBuffer.miBufferUseLen);
+                SetBuffer(cMemBuffer);
             }
         }
 
@@ -31,37 +37,30 @@ namespace jlsvr
         {
             if (this != &cMemBuffer)
             {
-                SetBuffer(cMemBuffer.mBuff, cMemBuffer.miBufferUseLen);
+                SetBuffer(cMemBuffer);
             }
 
             return *this;
         }
 
-        int CJlMemBuffer::SetBuffer(const std::unique_ptr<jlsvr::jlbase::_u8, std::function<void(void *)>> &upBuff, const size_t iDataLen)
+        int CJlMemBuffer::SetBuffer(const CJlMemBuffer &cMemBuffer)
         {
-            if (iDataLen <= 0)
+            miBufferUseLen = cMemBuffer.miBufferUseLen;
+            miBufferLen = cMemBuffer.miBufferLen;
+            miAppendNum = cMemBuffer.miAppendNum;
+            if (mBuff)
             {
-                return 1;
+                JL_MEMMGR_MEM_FUNC.pFreeFunc(mBuff);
             }
 
-            miBufferUseLen = 0;
-            miBufferLen = 0;
-            miAppendNum = 0;
-            mBuff.reset();
-            Append(upBuff.get(), iDataLen);
+            mBuff = JL_MEMMGR_MEM_FUNC.pMallocFunc(miBufferLen);
+            memcpy(mBuff, cMemBuffer.mBuff, miBufferUseLen);
             return 0;
         }
 
-        void *CJlMemBuffer::GetBuffer(size_t iIndex)
+        void *CJlMemBuffer::GetBuffer()
         {
-            if (iIndex > miBufferUseLen)
-            {
-                return nullptr;
-            }
-
-            jlsvr::jlbase::_u8 *pTmp = (jlsvr::jlbase::_u8 *)mBuff.get();
-            pTmp += iIndex;
-            return (void *)pTmp;
+            return mBuff;
         }
 
         void CJlMemBuffer::SetBuffLen(const size_t iLen)
@@ -79,11 +78,10 @@ namespace jlsvr
         {
             if (iLen <= 0)
             {
-                return nullptr;
+                return mBuff;
             }
 
-            jlsvr::jlbase::_u8 *pBuffer = (jlsvr::jlbase::_u8 *)mBuff.get();
-            if (!pBuffer)
+            if (!mBuff)
             {
                 if (iLen < MEM_BUFFER_DEFAULT_LEN)
                 {
@@ -94,32 +92,27 @@ namespace jlsvr
                     miBufferLen = iLen;
                 }
 
-                pBuffer = (jlsvr::jlbase::_u8 *)JL_MEMMGR_MEM_FUNC.pMallocFunc(miBufferLen + 1);
-                std::unique_ptr<jlsvr::jlbase::_u8, std::function<void(void *)>> up(pBuffer, JL_MEMMGR_MEM_FUNC.pFreeFunc);
-                mBuff = std::move(up);
+                mBuff = JL_MEMMGR_MEM_FUNC.pMallocFunc(miBufferLen + 1);
             }
             else
             {
                 if (iLen + miBufferUseLen >= miBufferLen)
                 {
                     miAppendNum++;
-                    miBufferLen += miAppendNum*MEM_BUFFER_DEFAULT_LEN;
-                    pBuffer = (jlsvr::jlbase::_u8 *)JL_MEMMGR_MEM_FUNC.pReallocFunc(pBuffer, miBufferLen);
-                    mBuff.release();
-                    mBuff.reset(pBuffer);
+                    miBufferLen += miAppendNum * MEM_BUFFER_DEFAULT_LEN;
+                    mBuff = JL_MEMMGR_MEM_FUNC.pReallocFunc(mBuff, miBufferLen);
                 }
             }
 
-            return pBuffer;
+            return mBuff;
         }
 
         void CJlMemBuffer::AppendNul()
         {
-            jlsvr::jlbase::_u8 *pBuffer = (jlsvr::jlbase::_u8 *)mBuff.get();
-            if (pBuffer)
+            if (mBuff)
             {
-                char *pTmp = (char *)pBuffer;
-                pTmp[miBufferUseLen] = '\0';
+                char *pBuff = (char *)mBuff;
+                pBuff[miBufferUseLen] = '\0';
             }
         }
 
@@ -127,14 +120,12 @@ namespace jlsvr
         {
             if (pData && iLen > 0)
             {
-                 jlsvr::jlbase::_u8 *pBuffer = (jlsvr::jlbase::_u8 *)mBuff.get();
-                 size_t iNeedLen = 0;
-                if (!pBuffer || iLen + miBufferUseLen > miBufferLen)
+                if (iLen + miBufferUseLen > miBufferLen)
                 {
-                    pBuffer = (jlsvr::jlbase::_u8 *)AllocBuffer(iLen);
+                    AllocBuffer(iLen);
                 }
 
-                memcpy((char *)pBuffer + miBufferUseLen, pData, iLen);
+                memcpy((char *)mBuff + miBufferUseLen, pData, iLen);
                 miBufferUseLen += iLen;
             }
             else

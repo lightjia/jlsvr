@@ -22,16 +22,16 @@ namespace jlsvr
         public:
             void Append(const void *pData, const size_t iLen);
             void AppendNul();
-            void *GetBuffer(size_t iIndex = 0);
+            void* GetBuffer();
             const size_t GetBuffLen() { return miBufferUseLen; }
             void SetBuffLen(const size_t iLen);
-            void *AllocBuffer(size_t iLen);
+            void* AllocBuffer(size_t iLen);
 
         private:
-            int SetBuffer(const std::unique_ptr<jlsvr::jlbase::_u8, std::function<void (void *)>>& upBuff, const size_t iDataLen);
+            int SetBuffer(const CJlMemBuffer &cMemBuffer);
 
         private:
-            std::unique_ptr<jlsvr::jlbase::_u8, std::function<void (void *)>> mBuff;
+            void* mBuff;
             int miAppendNum;
             size_t miBufferLen;
             size_t miBufferUseLen;
