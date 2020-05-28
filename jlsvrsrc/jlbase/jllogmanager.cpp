@@ -14,12 +14,28 @@ namespace jlsvr
             }
         }
 
+        std::shared_ptr<CJlLog> &CJlLogManager::NewLogger(LogType iType, LogLevel iLevel, const std::string &strCat, const std::string &strLogDir)
+        {
+            std::shared_ptr<CJlLog> defaultLog(new CJlLog(iType, iLevel, strCat, strLogDir));
+            mVecLoggers.push_back(defaultLog);
+            return mVecLoggers.back();
+        }
+
         void CJlLogManager::OnThreadRun()
         {
-            ThreadWait(1);
-            for(auto& log:mVecLoggers)
+            ThreadWait(100);
+            int i = 0;
+            for (auto log = mVecLoggers.begin(); log != mVecLoggers.end(); i++)
             {
-                log->FlushLog();
+                log->get()->FlushLog();
+                if (i != 0 && log->use_count() == 1)
+                {
+                    printf("==========del loger==============\n");
+                    log = mVecLoggers.erase(log);
+                    continue;
+                }
+
+                log++;
             }
         }
     } // namespace jlbase

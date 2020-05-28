@@ -63,9 +63,9 @@ namespace jlsvr
             jlsvr::jlbase::CJlMemBuffer* mpBuffs[LOG_LEVEL_MAX];
         };
 
-#define JL_LOG_ERR(sLog, fmt, ...) sLog->AddLogItem(LOG_LEVEL_ERR, "[ERROR](%s:%s:%d)[Thread:%u] " fmt, __FILENAME__, __FUNCTION__, __LINE__, (unsigned int)jlsvr::jlbase::GetThreadId(), ##__VA_ARGS__)
-#define JL_LOG_DBG(sLog, fmt, ...) sLog->AddLogItem(LOG_LEVEL_DBG, "[DEBUG](%s:%s:%d)[Thread:%u] " fmt, __FILENAME__, __FUNCTION__, __LINE__, (unsigned int)jlsvr::jlbase::GetThreadId(), ##__VA_ARGS__)
-#define JL_LOG_INFO(sLog, fmt, ...) sLog->AddLogItem(LOG_LEVEL_INFO, "[Thread:%u] " fmt, (unsigned int)jlsvr::jlbase::GetThreadId(), ##__VA_ARGS__)
+#define JL_LOG_ERR(sLog, fmt, ...) sLog->AddLogItem(jlsvr::jlbase::LOG_LEVEL_ERR, "[ERROR](%s:%s:%d)[Thread:%u] " fmt, __FILENAME__, __FUNCTION__, __LINE__, (unsigned int)jlsvr::jlbase::GetThreadId(), ##__VA_ARGS__)
+#define JL_LOG_DBG(sLog, fmt, ...) sLog->AddLogItem(jlsvr::jlbase::LOG_LEVEL_DBG, "[DEBUG](%s:%s:%d)[Thread:%u] " fmt, __FILENAME__, __FUNCTION__, __LINE__, (unsigned int)jlsvr::jlbase::GetThreadId(), ##__VA_ARGS__)
+#define JL_LOG_INFO(sLog, fmt, ...) sLog->AddLogItem(jlsvr::jlbase::LOG_LEVEL_INFO, "[Thread:%u] " fmt, (unsigned int)jlsvr::jlbase::GetThreadId(), ##__VA_ARGS__)
 
         class CJlLogManager : public jlsvr::jlbase::CJlSingleton<CJlLogManager>, public jlsvr::jlplus11::CJl11Thread
         {
@@ -74,8 +74,8 @@ namespace jlsvr
             ~CJlLogManager() {}
 
         public:
-            std::shared_ptr<CJlLog> &NewLogger(LogType iType, LogLevel iLevel, const std::string &strCat, const std::string &strLogDir);
-            std::shared_ptr<CJlLog> &DefaultLogger() { return mVecLoggers[0]; };
+            std::shared_ptr<CJlLog>& NewLogger(LogType iType, LogLevel iLevel, const std::string &strCat, const std::string &strLogDir);
+            std::shared_ptr<CJlLog>& DefaultLogger() { return mVecLoggers[0]; };
 
         protected:
             void OnThreadRun() override final;

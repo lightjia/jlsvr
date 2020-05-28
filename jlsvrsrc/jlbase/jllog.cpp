@@ -43,6 +43,13 @@ namespace jlsvr
         CJlLog::~CJlLog()
         {
             CloseFile();
+            for (int i = 0; i < LOG_LEVEL_MAX; i++)
+            {
+                if (mpBuffs[i])
+                {
+                    delete mpBuffs[i];
+                }
+            }
         }
 
         void CJlLog::AddLogItem(LogLevel iLevel, const char *format, ...)
@@ -125,6 +132,7 @@ namespace jlsvr
                 mpLog = fopen(strFile.c_str(), "a+");
                 if (mpLog)
                 {
+                    setvbuf(mpLog, NULL, _IONBF, 0);
                     mStrFileName = strFile;
                 }
                 else
