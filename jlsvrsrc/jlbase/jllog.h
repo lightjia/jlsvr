@@ -83,6 +83,7 @@ namespace jlsvr
         private:
             bool mbInit = false;
             std::vector<std::shared_ptr<CJlLog>> mVecLoggers;
+            jlsvr::jlplus11::CPlus11Mutex mMux;
         };
 
 #define LOG_ERR(fmt, ...) jlsvr::jlbase::CJlLogManager::Instance()->DefaultLogger()->AddLogItem(jlsvr::jlbase::LOG_LEVEL_ERR, "[ERROR](%s:%s:%d)[Thread:%u] " fmt, __FILENAME__, __FUNCTION__, __LINE__, (unsigned int)jlsvr::jlbase::GetThreadId(), ##__VA_ARGS__)

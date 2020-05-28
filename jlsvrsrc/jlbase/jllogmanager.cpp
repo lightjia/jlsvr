@@ -16,6 +16,7 @@ namespace jlsvr
 
         std::shared_ptr<CJlLog> &CJlLogManager::NewLogger(LogType iType, LogLevel iLevel, const std::string &strCat, const std::string &strLogDir)
         {
+            jlsvr::jlbase::CJlAutoMutex mux(&mMux);
             std::shared_ptr<CJlLog> defaultLog(new CJlLog(iType, iLevel, strCat, strLogDir));
             mVecLoggers.push_back(defaultLog);
             return mVecLoggers.back();
@@ -24,6 +25,7 @@ namespace jlsvr
         void CJlLogManager::OnThreadRun()
         {
             ThreadWait(100);
+            jlsvr::jlbase::CJlAutoMutex mux(&mMux);
             int i = 0;
             for (auto log = mVecLoggers.begin(); log != mVecLoggers.end(); i++)
             {
