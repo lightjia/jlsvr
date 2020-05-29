@@ -10,6 +10,7 @@ namespace jlsvr
 {
     namespace jlbase
     {
+        typedef void (*THREAD_ENTRY)(void*);
         class CJlThread
         {
         public:
@@ -35,7 +36,8 @@ namespace jlsvr
             virtual void OnThreadActivate(){};
 
         protected:
-            std::function<void (void *)> mThreadEntry;
+            //std::function<void (void *)> mThreadEntry;
+            THREAD_ENTRY mThreadEntry;
             bool mbJoin;
         };
     } // namespace jlbase

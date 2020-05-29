@@ -8,8 +8,7 @@
 #include "jlcommoninc.h"
 #include "jlmembuffer.h"
 #include "jlcolordef.h"
-#include "jl11mutex.h"
-#include "jl11thread.h"
+#include "jluvthread.h"
 #include "jlsingleton.h"
 #include <memory>
 #include <cstdio>
@@ -57,7 +56,7 @@ namespace jlsvr
             std::string mStrCat;
             std::string mStrFileName;
             std::string mstrLogDir;
-            jlsvr::jlplus11::CPlus11Mutex mMux;
+            jlsvr::jlthrid::CJlUvMutex mMux;
             jlsvr::jlbase::_u64 miCount = 0;
             FILE *mpLog = nullptr;
             jlsvr::jlbase::CJlMemBuffer *mpBuffs[LOG_LEVEL_MAX];
@@ -67,7 +66,7 @@ namespace jlsvr
 #define JL_LOG_DBG(sLog, fmt, ...) sLog->AddLogItem(jlsvr::jlbase::LOG_LEVEL_DBG, "[DEBUG](%s:%s:%d)[Thread:%u] " fmt, __FILENAME__, __FUNCTION__, __LINE__, (unsigned int)jlsvr::jlbase::GetThreadId(), ##__VA_ARGS__)
 #define JL_LOG_INFO(sLog, fmt, ...) sLog->AddLogItem(jlsvr::jlbase::LOG_LEVEL_INFO, "[Thread:%u] " fmt, (unsigned int)jlsvr::jlbase::GetThreadId(), ##__VA_ARGS__)
 
-        class CJlLogManager : public jlsvr::jlbase::CJlSingleton<CJlLogManager>, public jlsvr::jlplus11::CJl11Thread
+        class CJlLogManager : public jlsvr::jlbase::CJlSingleton<CJlLogManager>, public jlsvr::jlthrid::CJlUvThread
         {
             SINGLE_CLASS_INITIAL(CJlLogManager);
 
@@ -83,7 +82,7 @@ namespace jlsvr
         private:
             bool mbInit = false;
             std::vector<std::shared_ptr<CJlLog>> mVecLoggers;
-            jlsvr::jlplus11::CPlus11Mutex mMux;
+            jlsvr::jlthrid::CJlUvMutex mMux;
         };
 
 #define LOG_ERR(fmt, ...) jlsvr::jlbase::CJlLogManager::Instance()->DefaultLogger()->AddLogItem(jlsvr::jlbase::LOG_LEVEL_ERR, "[ERROR](%s:%s:%d)[Thread:%u] " fmt, __FILENAME__, __FUNCTION__, __LINE__, (unsigned int)jlsvr::jlbase::GetThreadId(), ##__VA_ARGS__)
