@@ -60,7 +60,7 @@ namespace jlsvr
             jlsvr::jlplus11::CPlus11Mutex mMux;
             jlsvr::jlbase::_u64 miCount = 0;
             FILE *mpLog = nullptr;
-            jlsvr::jlbase::CJlMemBuffer* mpBuffs[LOG_LEVEL_MAX];
+            jlsvr::jlbase::CJlMemBuffer *mpBuffs[LOG_LEVEL_MAX];
         };
 
 #define JL_LOG_ERR(sLog, fmt, ...) sLog->AddLogItem(jlsvr::jlbase::LOG_LEVEL_ERR, "[ERROR](%s:%s:%d)[Thread:%u] " fmt, __FILENAME__, __FUNCTION__, __LINE__, (unsigned int)jlsvr::jlbase::GetThreadId(), ##__VA_ARGS__)
@@ -74,8 +74,8 @@ namespace jlsvr
             ~CJlLogManager() {}
 
         public:
-            std::shared_ptr<CJlLog>& NewLogger(LogType iType, LogLevel iLevel, const std::string &strCat, const std::string &strLogDir);
-            std::shared_ptr<CJlLog>& DefaultLogger() { return mVecLoggers[0]; };
+            std::shared_ptr<CJlLog> &NewLogger(LogType iType, LogLevel iLevel, const std::string &strCat, const std::string &strLogDir);
+            std::shared_ptr<CJlLog> &DefaultLogger() { return mVecLoggers[0]; };
 
         protected:
             void OnThreadRun() override final;
@@ -89,6 +89,51 @@ namespace jlsvr
 #define LOG_ERR(fmt, ...) jlsvr::jlbase::CJlLogManager::Instance()->DefaultLogger()->AddLogItem(jlsvr::jlbase::LOG_LEVEL_ERR, "[ERROR](%s:%s:%d)[Thread:%u] " fmt, __FILENAME__, __FUNCTION__, __LINE__, (unsigned int)jlsvr::jlbase::GetThreadId(), ##__VA_ARGS__)
 #define LOG_DBG(fmt, ...) jlsvr::jlbase::CJlLogManager::Instance()->DefaultLogger()->AddLogItem(jlsvr::jlbase::LOG_LEVEL_DBG, "[DEBUG](%s:%s:%d)[Thread:%u] " fmt, __FILENAME__, __FUNCTION__, __LINE__, (unsigned int)jlsvr::jlbase::GetThreadId(), ##__VA_ARGS__)
 #define LOG_INFO(fmt, ...) jlsvr::jlbase::CJlLogManager::Instance()->DefaultLogger()->AddLogItem(jlsvr::jlbase::LOG_LEVEL_INFO, "[Thread:%u] " fmt, (unsigned int)jlsvr::jlbase::GetThreadId(), ##__VA_ARGS__)
+
+#define ASSERT(expr)                                \
+    do                                              \
+    {                                               \
+        if (!(expr))                                \
+        {                                           \
+            LOG_ERR("assert \"%s\" failed", #expr); \
+        }                                           \
+    } while (0)
+#define ASSERT_RET(expr)                            \
+    do                                              \
+    {                                               \
+        if (!(expr))                                \
+        {                                           \
+            LOG_ERR("assert \"%s\" failed", #expr); \
+            return;                                 \
+        }                                           \
+    } while (0)
+#define ASSERT_RET_VALUE(expr, retval)              \
+    do                                              \
+    {                                               \
+        if (!(expr))                                \
+        {                                           \
+            LOG_ERR("assert \"%s\" failed", #expr); \
+            return retval;                          \
+        }                                           \
+    } while (0)
+#define ASSERT_ERR_MSG(expr, fmt, ...)                                \
+    do                                                                \
+    {                                                                 \
+        if (!(expr))                                                  \
+        {                                                             \
+            LOG_ERR("assert \"%s\", msg:" fmt, #expr, ##__VA_ARGS__); \
+        }                                                             \
+    } while (0);
+
+#define ASSERT_ERR_MSG_RET(expr, retval, fmt, ...)                    \
+    do                                                                \
+    {                                                                 \
+        if (!(expr))                                                  \
+        {                                                             \
+            LOG_ERR("assert \"%s\", msg:" fmt, #expr, ##__VA_ARGS__); \
+            return retval;                                            \
+        }                                                             \
+    } while (0);
     } // namespace jlbase
 } // namespace jlsvr
 #endif //__JL_LOG__H_

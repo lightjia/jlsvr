@@ -127,7 +127,16 @@ namespace jlsvr
                 CloseFile();
                 jlsvr::jlbase::tagJlTime stNow = jlsvr::jlbase::GetNowTime();
                 char szFileName[500];
-                snprintf(szFileName, 500, "%02d-%02d-%02d-%02d-%02d-%02d.log", stNow.tmyear, stNow.tmmon, stNow.tmmday, stNow.tmhour, stNow.tmmin, stNow.tmsec);
+                if (mStrCat.empty())
+                {
+                    snprintf(szFileName, 500, "%02d-%02d-%02d-%02d-%02d-%02d.log", stNow.tmyear, stNow.tmmon, stNow.tmmday, stNow.tmhour, stNow.tmmin, stNow.tmsec);
+                }
+
+                else
+                {
+                    snprintf(szFileName, 500, "%s-%02d-%02d-%02d.log", mStrCat.c_str(), stNow.tmhour, stNow.tmmin, stNow.tmsec);
+                }
+
                 std::string strFile = mstrLogDir + "/" + szFileName;
                 mpLog = fopen(strFile.c_str(), "a+");
                 if (mpLog)

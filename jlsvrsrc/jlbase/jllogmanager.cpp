@@ -32,7 +32,6 @@ namespace jlsvr
                 log->get()->FlushLog();
                 if (i != 0 && log->use_count() == 1)
                 {
-                    printf("==========del loger==============\n");
                     log = mVecLoggers.erase(log);
                     continue;
                 }
