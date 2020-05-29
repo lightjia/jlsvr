@@ -13,6 +13,7 @@ namespace jlsvr
 {
     namespace jlbase
     {
+        #define BZERO(P) memset(P, 0, sizeof(*P))
         //time oper
         void SleepMs(jlsvr::jlbase::_ul dwMillions);
         jlsvr::jlbase::_u64 GetCurMs();

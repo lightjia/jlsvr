@@ -5,7 +5,8 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "/home/jia/jlsvr/jlsvrsrc/jltest",
-                "/home/jia/jlsvr/jlsvrsrc/jlbase"
+                "/home/jia/jlsvr/jlsvrsrc/jlbase",
+                "/home/jia/jlsvr/third/libuv/LIBUV/include"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",
