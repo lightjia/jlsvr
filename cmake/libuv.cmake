@@ -23,3 +23,7 @@ ExternalProject_Add(LIBUV
 set(LIBUV_LIB       ${LIBUV_LIB_PATH}/lib64/libuv.so)
 # 指定头文件所在的目录
 set(LIBUV_INCLUDE_DIR   ${LIBUV_LIB_PATH}/include)
+
+#使用库
+#target_link_libraries(libuv ${LIBUV_LIB})
+#target_include_directories(libuv PRIVATE ${LIBUV_INCLUDE_DIR})

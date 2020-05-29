@@ -14,6 +14,3 @@ FOREACH(CMAKE_PATH ${THIRD_CMAKES})
 ENDFOREACH(CMAKE_PATH)
 
 add_subdirectory(jlsvrsrc)
-
-#target_link_libraries(libuv ${LIBUV_LIB})
-#target_include_directories(libuv PRIVATE ${LIBUV_INCLUDE_DIR})
