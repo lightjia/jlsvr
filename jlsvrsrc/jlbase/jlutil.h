@@ -13,7 +13,22 @@ namespace jlsvr
 {
     namespace jlbase
     {
-        #define BZERO(P) memset(P, 0, sizeof(*P))
+#define BZERO(P) memset(P, 0, sizeof(*P))
+#define DODELETE(P)   \
+    do                \
+    {                 \
+        if (P)        \
+            delete P; \
+        P = nullptr;  \
+    } while (0)
+#define DOFREE(P)    \
+    do               \
+    {                \
+        if (P)       \
+            free(P); \
+        P = nullptr; \
+    } while (0)
+
         //time oper
         void SleepMs(jlsvr::jlbase::_ul dwMillions);
         jlsvr::jlbase::_u64 GetCurMs();
@@ -22,7 +37,7 @@ namespace jlsvr
         //os oper
         jlsvr::jlbase::_ul GetThreadId();
         std::string GetProgramRunPath();
-        
+
         //file oper
         bool IsFileExist(const char *strFileName);
         bool IsDirExist(const char *strDirectory);
