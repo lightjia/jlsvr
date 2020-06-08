@@ -10,6 +10,7 @@ namespace jlsvr
     namespace jlthrid
     {
 #include "uv.h"
+#include "jlmemmgr.h"
 
 #define UV_DEFAULT_BUF_SIZE 10240 //default 10KB buffer size
 #pragma pack(1)
