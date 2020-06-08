@@ -1,7 +1,6 @@
 #include "jltest.h"
 #include "jlutil.h"
-#include "jlmutex.h"
-#include"jlmemmgr.h"
+#include "jlmemmgr.h"
 int main(int argc, char const *argv[])
 {
     /* code */

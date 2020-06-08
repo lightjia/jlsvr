@@ -24,7 +24,7 @@ add_src_subdirs(source_files "." "jlbase" "jlcplus11" "jltest" "jlthrid/jluv")
 
 #link_directories("/usr/lib64/mysql/")
 #set(lib_link ${lib_link} "${lib_dir}/libuv/linux/lib/libuv.a")
-set(lib_link ${lib_link} "pthread")
+set(lib_link ${lib_link} "pthread" "uuid")
 
 set(lib_link_flag "")
 set(CMAKE_C_FLAGS "-ggdb")
